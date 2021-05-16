@@ -1,11 +1,14 @@
 #lang simply-scheme
 
 (define (switch sent)
-  (cond ((empty? sent) 
-         (sent))
-        ((or (equal? ((first sent) 'I)) (equal? (first sent) 'i)) 
-         (sentence 'you (switch (butlast sent))))
-        ((or (first sent 'Me) (first sent 'me)) 
-         (sentence 'you (switch (butlast sent))))
-        ((or (first sent 'You) (first sent 'you)) 
-         (sentence 'me (switch (butlast sent))))))
+  (if (empty? sent)
+      '()
+      (sentence (change-word (first sent)) 
+                (switch (butfirst sent)))))
+
+(define (change-word word)
+  (cond ((equal? word 'I) 'you)
+        ((equal? word 'me) 'you)
+        ((equal? word 'You) 'I)
+        ((equal? word 'you) 'I)
+        (else word)))
